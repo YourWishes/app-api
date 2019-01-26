@@ -25,14 +25,13 @@ import { Module } from '@yourwishes/app-base';
 
 export abstract class APIRequest {
   owner:Module;
-  method:string;
   path:string;
 
-  constructor(owner:Module, method:string, path:string) {
+  constructor(owner:Module, path:string) {
     if(!owner) throw new Error("Invalid Owner Module");
+    if(!path || !path.length) throw new Error("Invalid Path");
 
     this.owner = owner;
-    this.method = method.toUpperCase();
     this.path = path;
   }
 
