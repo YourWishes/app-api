@@ -1,4 +1,4 @@
-import { APIHandler, APIResponse, APIRequest } from './';
+import { APIHandler, APIResponse, APIRequest } from './../';
 
 class DummyHandler extends APIHandler {
   request:jest.Mock;

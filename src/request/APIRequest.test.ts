@@ -1,9 +1,6 @@
-import { APIHandler, APIResponse, APIRequest } from './';
-import { App, Module } from '@yourwishes/app-base';
+import { APIHandler, APIResponse, APIRequest, IAPIOwner } from './../';
 
-class DummyApp extends App { };
-class DummyModule extends Module {
-  async init() {}
+class DummyOwner implements IAPIOwner {
 };
 
 class DummyRequest extends APIRequest {
@@ -32,57 +29,35 @@ class DummyRequest extends APIRequest {
   getData(): object { return this.data; }
 }
 
-const app = new DummyApp();
-const apiModule = new DummyModule(app);
-
+const owner = new DummyOwner();
 
 
 describe('APIRequest', () => {
   it('should be constructable', () => {
-    expect(() => new DummyRequest(apiModule, '/test')).not.toThrow();
+    expect(() => new DummyRequest(owner, '/test')).not.toThrow();
   });
 
-  it('should require a real server module', () => {
+  it('should require a real owner', () => {
     expect(() => new DummyRequest(null, '/test')).toThrow();
   });
 
   it('should require a real path', () => {
-    expect(() => new DummyRequest(apiModule, null)).toThrow();
-    expect(() => new DummyRequest(apiModule, '')).toThrow();
+    expect(() => new DummyRequest(owner, null)).toThrow();
+    expect(() => new DummyRequest(owner, '')).toThrow();
   });
 });
 
 
 describe('getData', () => {
   it('should return the body out of the request', () => {
-    let request = new DummyRequest(apiModule, '/test');
+    let request = new DummyRequest(owner, '/test');
     expect(request.getData()).toStrictEqual(request.data);
   });
 });
 
 
-describe('isStringTrue', () => {
-  let request = new DummyRequest(apiModule, '/test');
-
-  it('should return things that appear to be truthy as true', () => {
-    expect(request.isStringTrue('true')).toStrictEqual(true);
-    expect(request.isStringTrue('1')).toStrictEqual(true);
-    expect(request.isStringTrue('checked')).toStrictEqual(true);
-    expect(request.isStringTrue('yes')).toStrictEqual(true);
-  });
-
-  it('should return things that DONT appear truthy as false', () => {
-    expect(request.isStringTrue('false')).toStrictEqual(false);
-    expect(request.isStringTrue('0')).toStrictEqual(false);
-    expect(request.isStringTrue('')).toStrictEqual(false);
-    expect(request.isStringTrue('null')).toStrictEqual(false);
-    expect(request.isStringTrue('no')).toStrictEqual(false);
-  });
-});
-
-
 describe('get', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return the entire data if no key is provided', () => {
     expect(req.get()).toStrictEqual(req.data);
@@ -107,7 +82,7 @@ describe('get', () => {
 });
 
 describe('getRecursive', () => {
-  let request = new DummyRequest(apiModule, '/test');
+  let request = new DummyRequest(owner, '/test');
 
   it('should return the item from the data object by using the keys in the array', () => {
     expect( request.getRecursive(['lorem'], { lorem: 'ipsum' }) ).toStrictEqual('ipsum');
@@ -122,7 +97,7 @@ describe('getRecursive', () => {
 });
 
 describe('has', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return true if the key is in the data', () => {
     expect(req.has('lorem')).toEqual(true);
@@ -143,7 +118,7 @@ describe('has', () => {
 });
 
 describe('hasRecursive', () => {
-  let r = new DummyRequest(apiModule, '/test');
+  let r = new DummyRequest(owner, '/test');
 
   it('should return true if the keys exist in the data object', () => {
     expect( r.hasRecursive(['lorem'], { lorem: 'ipsum' }) ).toStrictEqual(true);
@@ -159,7 +134,7 @@ describe('hasRecursive', () => {
 
 
 describe('getInteger', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should get an integer', () => {
     expect(req.getInteger('userId')).toStrictEqual(123910);
@@ -175,7 +150,7 @@ describe('getInteger', () => {
 });
 
 describe('getDouble', () => {
-  let req = new DummyRequest(apiModule,  '/test');
+  let req = new DummyRequest(owner,  '/test');
 
   it('should get a double', () => {
     expect(req.getDouble('userId')).toStrictEqual(123910);
@@ -193,7 +168,7 @@ describe('getDouble', () => {
 });
 
 describe('getBool', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return a boolean matching true or false', () => {
     expect(req.getBool('boolTrue')).toStrictEqual(true);
@@ -210,7 +185,7 @@ describe('getBool', () => {
 });
 
 describe('getString', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return the string out of the data', () => {
     expect(req.getString('lorem', 64)).toStrictEqual('ipsum');
@@ -249,7 +224,7 @@ describe('getString', () => {
 
 
 describe('hasInteger', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return true if the item is an integer', () => {
     expect(req.hasInteger('userId')).toStrictEqual(true);
@@ -265,7 +240,7 @@ describe('hasInteger', () => {
 });
 
 describe('hasDouble', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('should return true if the item is a double', () => {
     expect(req.hasDouble('userId')).toStrictEqual(true);
@@ -284,7 +259,7 @@ describe('hasDouble', () => {
 });
 
 describe('hasBool', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('return true if the item is a bool', () => {
     expect(req.hasBool('boolTrue')).toStrictEqual(true);
@@ -301,7 +276,7 @@ describe('hasBool', () => {
 });
 
 describe('hasString', () => {
-  let req = new DummyRequest(apiModule, '/test');
+  let req = new DummyRequest(owner, '/test');
 
   it('return true if the string is in the data', () => {
     expect(req.hasString('lorem', 64)).toStrictEqual(true);

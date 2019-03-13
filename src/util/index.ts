@@ -21,33 +21,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { APIResponse } from './APIResponse';
-import { APIRequest } from './APIRequest';
-
-export abstract class APIHandler {
-  paths:string[];
-
-  constructor(paths:string[]|string) {
-    //Take string and convert to array
-    if(!Array.isArray(paths)) paths = [ paths ];
-
-    //Validate
-    if(!paths.length) throw new Error('You must provide a path');
-
-    paths.forEach(e => {
-      if(typeof(e) !== 'string') throw new Error('Paths must be strings');
-    });
-
-    //Set
-    this.paths = paths;
-  }
-
-  hasPath(path:string):boolean {
-    for(let i = 0; i < this.paths.length; i++) {
-      if(this.paths[i] === path) return true;
-    }
-    return false;
-  }
-
-  abstract async onRequest(request:APIRequest):Promise<APIResponse>;
-}
+export const isStringTrue = (t:string):boolean => {
+  t = t.toLowerCase();
+  return (
+    t === "true" || t === "1" || t === "checked" || t === 'yes'
+  );
+};

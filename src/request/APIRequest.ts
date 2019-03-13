@@ -21,13 +21,14 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { Module } from '@yourwishes/app-base';
+import { IAPIOwner } from './../owner/';
+import { isStringTrue } from './../util/';
 
 export abstract class APIRequest {
-  owner:Module;
+  owner:IAPIOwner;
   path:string;
 
-  constructor(owner:Module, path:string) {
+  constructor(owner:IAPIOwner, path:string) {
     if(!owner) throw new Error("Invalid Owner Module");
     if(!path || !path.length) throw new Error("Invalid Path");
 
@@ -36,14 +37,6 @@ export abstract class APIRequest {
   }
 
   abstract getData():object;
-
-  isStringTrue(t:string) {
-    t = t.toLowerCase();
-    return (
-      t === "true" || t === "1" || t === "checked" || t === 'yes'
-    );
-  }
-
 
   //Some really nice API handlers
   get(key:string=null) {
@@ -81,7 +74,7 @@ export abstract class APIRequest {
   getBool(key:string) {
     if(!this.hasBool(key)) throw new Error("Invalid Type!");
     let t = this.get(key);
-    return this.isStringTrue(t);
+    return isStringTrue(t);
   }
 
   getString(key:string, maxLength:number, allowBlank:boolean=false) {
