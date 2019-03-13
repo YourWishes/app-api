@@ -1,6 +1,6 @@
 {
   "name": "@yourwishes/app-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "API Common Logic, for use by multiple api implementers. Built to stop conflicts between POST/GET API and Sock",
   "main": "dist/index.js",
   "scripts": {
@@ -30,12 +30,10 @@
   "homepage": "https://github.com/YourWishes/app-api#readme",
   "devDependencies": {
     "@types/jest": "^23.3.10",
-    "@types/node": "^10.12.12",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "@yourwishes/app-base": "^1.1.1"
   }
 }
