@@ -1,11 +1,11 @@
 {
   "name": "@yourwishes/app-api",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "API Common Logic, for use by multiple api implementers. Built to stop conflicts between POST/GET API and Sock",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc -p ."
+    "build": "ttsc -p ."
   },
   "repository": {
     "type": "git",
@@ -30,8 +30,10 @@
   "homepage": "https://github.com/YourWishes/app-api#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "@zerollup/ts-transform-paths": "^1.7.3",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
+    "ttypescript": "^1.5.7",
     "typescript": "^3.5.1"
   },
   "dependencies": {}
